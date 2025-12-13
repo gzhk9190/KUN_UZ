@@ -1,0 +1,28 @@
+package kun.uz.entities;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import kun.uz.entities.base.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+
+import java.util.prefs.BackingStoreException;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "category")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class CategoryEntity extends BaseEntity {
+    @Column(name = "order_number", nullable = false)
+    Integer orderNumber;
+    @Column(name = "name_uz")
+    String nameUz;
+    @Column(name = "name_ru")
+    String nameRu;
+    @Column(name = "name_en")
+    String nameEn;
+}
