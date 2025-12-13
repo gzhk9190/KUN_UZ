@@ -6,5 +6,5 @@ package kun.uz.enums;
  * @contact @BilolTuxtamurodov
  */
 public enum ProfileRole {
-    ROLE_ADMIN, ROLE_USER
+    ROLE_ADMIN, ROLE_USER, ROLE_MODERATOR,ROLE_PUBLISHER
 }

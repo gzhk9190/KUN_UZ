@@ -11,9 +11,9 @@ import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
 /**
- * @author 'Bilol Tuxtamurodov' on 10.12.2025
- * @project Lesson_130
- * @contact @BilolTuxtamurodov
+ * @author 'AzamSuxbatillayev' on 13.12.2025
+ * @project KUN_UZ
+ * @contact @bot_1_maker
  */
 
 @Entity
