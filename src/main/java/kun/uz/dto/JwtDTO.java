@@ -20,5 +20,4 @@ public class JwtDTO {
     String id;
     String phone;
     String role;
-
 }

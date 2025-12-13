@@ -1,4 +1,4 @@
-package kun.uz.dto;
+package kun.uz.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor()
-public class AttachDTO {
+public class AttachResponseDTO {
     String id;
     String url;
     String extension;
     String originName;
     LocalDateTime createdDate;
 
-    public AttachDTO(String id, String url) {
+    public AttachResponseDTO(String id, String url) {
         this.id = id;
         this.url = url;
     }

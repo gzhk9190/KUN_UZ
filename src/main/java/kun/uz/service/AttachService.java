@@ -1,6 +1,6 @@
 package kun.uz.service;
 
-import kun.uz.dto.AttachDTO;
+import kun.uz.dto.response.AttachResponseDTO;
 import kun.uz.entities.AttachEntity;
 import kun.uz.repository.AttachRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +28,18 @@ public class AttachService {
     @Value("${attach.upload.folder}")
     private String attachFolder;
 
-    public List<AttachDTO> upload(Map<String, MultipartFile> files) {
+    public List<AttachResponseDTO> upload(Map<String, MultipartFile> files) {
         String ymd = getYMDString();
 
         File folder = new File(attachFolder + ymd);
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        List<AttachDTO> list = new LinkedList<>();
+        List<AttachResponseDTO> list = new LinkedList<>();
         files.forEach((s,file)->{
             String extension =getExtension(Objects.requireNonNull(file.getOriginalFilename()));
             AttachEntity attachEntity = saveAttach(ymd,extension,file);
-            AttachDTO attachDTO = toDTO(attachEntity);
+            AttachResponseDTO attachDTO = toDTO(attachEntity);
 
             try {
                 byte [] bytes = file.getBytes();
@@ -84,8 +84,8 @@ public class AttachService {
         int lastIndex = originName.lastIndexOf("\\.");
         return originName.substring(lastIndex+1);
     }
-    public AttachDTO toDTO(AttachEntity entity){
-        AttachDTO dto = new AttachDTO();
+    public AttachResponseDTO toDTO(AttachEntity entity){
+        AttachResponseDTO dto = new AttachResponseDTO();
         dto.setId(entity.getId());
         dto.setOriginName(entity.getOriginName());
         dto.setCreatedDate(entity.getCreateDate());
@@ -117,10 +117,10 @@ public class AttachService {
             return "Deletion failed";
         }
     }
-    public PageImpl<AttachDTO>getPaginationList(int page, int size){
+    public PageImpl<AttachResponseDTO>getPaginationList(int page, int size){
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
         Page<AttachEntity>pagination = attachRepository.findAll(pageable);
-        List<AttachDTO> list = new ArrayList<>();
+        List<AttachResponseDTO> list = new ArrayList<>();
         pagination.stream().forEach(entity ->  list.add(toDTO(entity)));
         return new PageImpl<>(list,pageable,pagination.getTotalElements());
     }
