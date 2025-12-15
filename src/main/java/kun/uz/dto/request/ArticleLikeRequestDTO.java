@@ -11,4 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class ArticleLikeRequestDTO {
     String profile_id;
     String article_id;
+
+    public ArticleLikeRequestDTO() {
+    }
 }

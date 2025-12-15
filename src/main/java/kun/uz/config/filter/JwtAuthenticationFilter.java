@@ -19,9 +19,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * @author 'Bilol Tuxtamurodov' on 10.12.2025
- * @project Lesson_130
- * @contact @BilolTuxtamurodov
+ * @author 'A'zam Suhbatillayev' on 15.12.2025
+ * @project KUN_UZ
+ * @contact @AzamSuhbatillayev
  */
 
 @Component

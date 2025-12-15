@@ -11,4 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class CommentLikeRequestDTO {
     String profileId;
     String commentId;
+
+    public CommentLikeRequestDTO() {
+    }
 }

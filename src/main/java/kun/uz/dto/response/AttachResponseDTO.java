@@ -1,6 +1,8 @@
 package kun.uz.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import kun.uz.entities.ArticleTypeEntity;
+import kun.uz.entities.AttachEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +26,14 @@ public class AttachResponseDTO {
     public AttachResponseDTO(String id, String url) {
         this.id = id;
         this.url = url;
+    }
+    public AttachResponseDTO toDTO(AttachEntity entity) {
+        AttachResponseDTO response = new AttachResponseDTO();
+        response.setId(entity.getId());
+        response.setCreatedDate(entity.getCreateDate());
+        response.setUrl(entity.getPath());
+        response.setExtension(entity.getExtension());
+        response.setOriginName(entity.getOriginName());
+        return response;
     }
 }

@@ -111,7 +111,7 @@ public class AttachService {
         }
         File file = new File(attachFolder + entity.getPath()+"/"+entity.getId()+"."+entity.getExtension());
         if (file.delete()){
-            attachRepository.deleteCascade(fileName);
+//            attachRepository.deleteCascade(fileName);
             return "Attach was deleted";
         }else  {
             return "Deletion failed";
