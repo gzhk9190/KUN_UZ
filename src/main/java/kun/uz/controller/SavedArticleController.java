@@ -5,6 +5,7 @@ import kun.uz.dto.request.SavedArticleRequestDTO;
 import kun.uz.dto.response.SavedArticleResponseDTO;
 import kun.uz.service.SavedArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public class SavedArticleController {
     private final SavedArticleService savedArticleService;
 
     @PostMapping("/create")
-    public SavedArticleResponseDTO create(@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {
-        return savedArticleService.create(savedArticleRequestDTO);
+    public ResponseEntity<SavedArticleResponseDTO> create(@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {
+        return ResponseEntity.ok(savedArticleService.create(savedArticleRequestDTO));
     }
     @PutMapping("/update")
     public SavedArticleResponseDTO update(@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {

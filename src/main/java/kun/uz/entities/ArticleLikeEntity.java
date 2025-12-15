@@ -15,6 +15,11 @@ import java.util.prefs.BackingStoreException;
 @Table(name = "article_like")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ArticleLikeEntity extends BaseEntity {
+    @Column(name = "profile_id")
+    String profileId;
+
+    @Column(name = "article_id")
+    String articleId;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false)
     ProfileEntity profile;

@@ -13,6 +13,13 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "comment_like")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentLikeEntity  extends BaseEntity {
+
+    @Column(name = "profile_id")
+    String profileId;
+
+    @Column(name = "comment_id")
+    String commentId;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id", nullable = false)
     ProfileEntity profile;

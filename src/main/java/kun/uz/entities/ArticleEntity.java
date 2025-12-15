@@ -27,6 +27,17 @@ public class ArticleEntity extends BaseEntity {
     @Column(name = "image_id")
     String imageId;
 
+    @Column(name = "region_id")
+    String regionId;
+
+    @Column(name = "category_id")
+    String categoryId;
+
+    @Column(name = "moderator_id")
+    String moderatorId;
+
+    @Column(name = "publisher_id")
+    String publisherId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", nullable = false)
     RegionEntity region;

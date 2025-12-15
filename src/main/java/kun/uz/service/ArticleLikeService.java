@@ -15,7 +15,6 @@ import java.util.List;
 public class ArticleLikeService {
 
     public ArticleLikeResponseDTO create(@Valid ArticleLikeRequestDTO articleLikeRequestDTO) {
-
         return null;
     }
 

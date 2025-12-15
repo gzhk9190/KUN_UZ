@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 @Table(name = "comment")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentEntity extends BaseEntity {
+    @Column(name = "profile_id")
+    String profileId;
+    @Column(name = "article_id")
+    String articleId;
     @Column(name = "updated_date")
     LocalDateTime updatedDate;
     @ManyToOne(fetch = FetchType.LAZY)
