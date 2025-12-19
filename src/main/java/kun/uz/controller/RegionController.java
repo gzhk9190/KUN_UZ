@@ -24,7 +24,7 @@ public class RegionController {
     }
     @PutMapping("/update/{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public RegionResponseDTO update(@RequestParam("id") String id ,@Valid @RequestBody RegionRequestDTO regionRequestDTO) {
+    public ApiResponse<RegionResponseDTO> update(@RequestParam("id") String id ,@Valid @RequestBody RegionRequestDTO regionRequestDTO) {
         return regionService.update(id, regionRequestDTO);
     }
     @GetMapping("/get/{id}")
