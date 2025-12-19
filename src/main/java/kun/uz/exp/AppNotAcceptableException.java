@@ -1,0 +1,7 @@
+package kun.uz.exp;
+
+public class AppNotAcceptableException extends RuntimeException{
+    public AppNotAcceptableException(String message) {
+        super(message);
+    }
+}

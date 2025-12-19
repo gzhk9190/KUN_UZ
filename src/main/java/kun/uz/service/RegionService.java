@@ -2,34 +2,69 @@ package kun.uz.service;
 
 import jakarta.validation.Valid;
 import kun.uz.dto.request.RegionRequestDTO;
+import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.RegionResponseDTO;
+import kun.uz.entities.RegionEntity;
+import kun.uz.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor()
+@RequiredArgsConstructor
 @Slf4j
 public class RegionService {
-    public RegionResponseDTO create(@Valid RegionRequestDTO regionRequestDTO) {
+    private final RegionRepository regionRepository;
+
+    public ApiResponse<RegionResponseDTO> create(@Valid RegionRequestDTO dto) {
+        Optional<RegionEntity> optional = regionRepository.findByNameUzAndVisibleIsTrue(dto.getNameUz());
+        if (optional.isPresent()) {
+            return ApiResponse.badRequest("Bunday region mavjud");
+        }
+        RegionEntity entity = new RegionEntity();
+        entity.setNameUz(dto.getNameUz());
+        entity.setNameEn(dto.getNameEn());
+        entity.setNameRu(dto.getNameRu());
+        entity.setOrderNumber(dto.getOrderNumber());
+        RegionEntity saved = regionRepository.save(entity);
+
+        return ApiResponse.success(RegionResponseDTO.toDTO(saved));
+    }
+
+    public ApiResponse<RegionResponseDTO> update(String id, @Valid RegionRequestDTO regionRequestDTO) {
+        RegionEntity entity = get(id);
+        if (Objects.isNull(entity)) {
+            return ApiResponse.badRequest("Topilmadi");
+        }
+
+        // TODO update qiling
         return null;
     }
 
-    public RegionResponseDTO update(@Valid RegionRequestDTO regionRequestDTO) {
-        return null;
-    }
+    public ApiResponse<RegionResponseDTO> getById(String id) {
+        Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleIsTrue(id);
+        if(optional.isEmpty()) {
+            return ApiResponse.badRequest("Bunday viloyat yoki shahar mavjud emas");
+        } else {
+            return ApiResponse.success(RegionResponseDTO.toDTO(optional.get()));
+        }
 
-    public RegionResponseDTO getById(String id) {
-        return null;
-    }
+     }
 
-    public List<RegionResponseDTO> getAll() {
-        return null;
+     private RegionEntity get(String id) {
+        return regionRepository.findByIdAndVisibleIsTrue(id).orElse(null);
+     }
+
+    public ApiResponse<List<RegionResponseDTO>> getAll() {
+        return ApiResponse.success(regionRepository.findAllByVisibleIsTrue().stream().map(RegionResponseDTO::toDTO).toList());
     }
 
     public Boolean delete(String id) {
-        return false;
+        regionRepository.updateVisible(id);
+        return true;
     }
 }

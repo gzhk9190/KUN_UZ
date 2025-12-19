@@ -17,14 +17,14 @@ public class CommentLikeEntity  extends BaseEntity {
     @Column(name = "profile_id")
     String profileId;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id",  insertable = false, updatable = false)
+    ProfileEntity profile;
+
     @Column(name = "comment_id")
     String commentId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
-    ProfileEntity profile;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id", nullable = false)
+    @JoinColumn(name = "comment_id",   insertable = false, updatable = false)
     CommentEntity comment;
 }

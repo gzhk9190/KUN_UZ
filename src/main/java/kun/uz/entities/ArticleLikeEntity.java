@@ -21,9 +21,9 @@ public class ArticleLikeEntity extends BaseEntity {
     @Column(name = "article_id")
     String articleId;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
+    @JoinColumn(name = "profile_id",   insertable = false, updatable = false)
     ProfileEntity profile;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id", nullable = false)
+    @JoinColumn(name = "article_id",  insertable = false, updatable = false)
     ArticleEntity article;
 }

@@ -32,7 +32,7 @@ public class ProfileEntity extends BaseEntity {
     @Column(nullable = false)
     String password;
     String photoId;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     ProfileStatus status;
     @Enumerated(EnumType.STRING)
     ProfileRole role;

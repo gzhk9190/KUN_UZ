@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "comment")
+@Table(name = "comments")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentEntity extends BaseEntity {
     @Column(name = "profile_id")
@@ -22,12 +22,12 @@ public class CommentEntity extends BaseEntity {
     @Column(name = "updated_date")
     LocalDateTime updatedDate;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
+    @JoinColumn(name = "profile_id",   insertable = false, updatable = false)
     ProfileEntity profile;
     @Column(nullable = false, length = 200)
     String content;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id", nullable = false)
+    @JoinColumn(name = "article_id",   insertable = false, updatable = false)
     ArticleEntity article;
     @Column(name = "reply_id")
     String replyId;

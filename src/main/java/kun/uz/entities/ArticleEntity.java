@@ -38,19 +38,23 @@ public class ArticleEntity extends BaseEntity {
 
     @Column(name = "publisher_id")
     String publisherId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id", nullable = false)
+    @JoinColumn(name = "region_id", insertable = false, updatable = false)
     RegionEntity region;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
     CategoryEntity category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "moderator_id", nullable = false)
+    @JoinColumn(name = "moderator_id", insertable = false, updatable = false)
     ProfileEntity moderator;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "publisher_id", nullable = false)
+    @JoinColumn(name = "publisher_id", insertable = false, updatable = false)
     ProfileEntity publisher;
+
+    @Enumerated(EnumType.STRING)
     ArticleStatus status;
 }

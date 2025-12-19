@@ -18,7 +18,7 @@ public class RegionResponseDTO extends RegionRequestDTO {
     LocalDateTime createdDate;
     Boolean visible;
 
-    public RegionResponseDTO toDTO(RegionEntity entity) {
+    public static RegionResponseDTO toDTO(RegionEntity entity) {
         RegionResponseDTO response = new RegionResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());
