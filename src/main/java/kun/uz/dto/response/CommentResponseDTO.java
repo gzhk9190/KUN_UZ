@@ -18,7 +18,7 @@ public class CommentResponseDTO extends CommentRequestDTO {
     LocalDateTime createdDate;
     Boolean visible;
 
-    public CommentResponseDTO toDTO(CommentEntity entity) {
+    public static CommentResponseDTO toDTO(CommentEntity entity) {
         CommentResponseDTO response = new CommentResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

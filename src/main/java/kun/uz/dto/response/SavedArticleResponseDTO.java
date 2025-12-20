@@ -18,7 +18,7 @@ public class SavedArticleResponseDTO extends SavedArticleRequestDTO {
     LocalDateTime createdDate;
     Boolean visible;
 
-    public SavedArticleResponseDTO toDTO(SavedArticleEntity entity) {
+    public static SavedArticleResponseDTO toDTO(SavedArticleEntity entity) {
         SavedArticleResponseDTO response = new SavedArticleResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

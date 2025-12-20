@@ -19,7 +19,7 @@ public class CommentLikeResponseDTO extends CommentLikeRequestDTO {
     String id;
     LocalDateTime createdDate;
     Boolean visible;
-    public CommentLikeResponseDTO toDTO(CommentLikeEntity entity) {
+    public static CommentLikeResponseDTO toDTO(CommentLikeEntity entity) {
         CommentLikeResponseDTO response = new CommentLikeResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

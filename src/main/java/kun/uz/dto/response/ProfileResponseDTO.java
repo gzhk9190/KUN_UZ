@@ -17,7 +17,7 @@ public class ProfileResponseDTO extends ProfileRequestDTO {
     String id;
     LocalDateTime createdDate;
     Boolean visible;
-    ProfileResponseDTO toDTO(ProfileEntity entity) {
+  public static  ProfileResponseDTO toDTO(ProfileEntity entity) {
        ProfileResponseDTO response = new ProfileResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

@@ -16,7 +16,7 @@ public class ArticleResponseDTO extends ArticleRequestDTO {
     String id;
     LocalDateTime createdDate;
     Boolean visible;
-    public ArticleResponseDTO toDTO(ArticleEntity entity) {
+    public static ArticleResponseDTO toDTO(ArticleEntity entity) {
         ArticleResponseDTO response = new ArticleResponseDTO();
         response.setId(entity.getId());
         response.setVisible(entity.getVisible());

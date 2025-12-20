@@ -25,6 +25,14 @@ public class RegionService {
         if (optional.isPresent()) {
             return ApiResponse.badRequest("Bunday region mavjud");
         }
+        Optional<RegionEntity> optional1 = regionRepository.findByNameEnAndVisibleIsTrue(dto.getNameEn());
+        if (optional1.isPresent()) {
+            return ApiResponse.badRequest("Region Exists");
+        }
+        Optional<RegionEntity> optional2 = regionRepository.findByNameRuAndVisibleIsTrue(dto.getNameRu());
+        if (optional2.isPresent()) {
+            return ApiResponse.badRequest("Region Exists(ru)");
+        }
         RegionEntity entity = new RegionEntity();
         entity.setNameUz(dto.getNameUz());
         entity.setNameEn(dto.getNameEn());
@@ -40,9 +48,12 @@ public class RegionService {
         if (Objects.isNull(entity)) {
             return ApiResponse.badRequest("Topilmadi");
         }
-
+        entity.setNameUz(regionRequestDTO.getNameUz());
+        entity.setNameEn(regionRequestDTO.getNameEn());
+        entity.setNameRu(regionRequestDTO.getNameRu());
+        entity.setOrderNumber(regionRequestDTO.getOrderNumber());
+        return ApiResponse.success(RegionResponseDTO.toDTO(regionRepository.save(entity)));
         // TODO update qiling
-        return null;
     }
 
     public ApiResponse<RegionResponseDTO> getById(String id) {

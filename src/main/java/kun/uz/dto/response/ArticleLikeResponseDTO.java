@@ -26,7 +26,7 @@ public class ArticleLikeResponseDTO extends ArticleLikeRequestDTO {
         super(profile_id, article_id);
     }
 
-    public ArticleLikeResponseDTO toDTO(ArticleLikeEntity entity) {
+    public static ArticleLikeResponseDTO toDTO(ArticleLikeEntity entity) {
         ArticleLikeResponseDTO response = new ArticleLikeResponseDTO();
         response.setArticle_id(entity.getArticle().getId());
         response.setId(entity.getId());

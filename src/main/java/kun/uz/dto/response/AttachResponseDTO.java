@@ -27,7 +27,7 @@ public class AttachResponseDTO {
         this.id = id;
         this.url = url;
     }
-    public AttachResponseDTO toDTO(AttachEntity entity) {
+    public static AttachResponseDTO toDTO(AttachEntity entity) {
         AttachResponseDTO response = new AttachResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

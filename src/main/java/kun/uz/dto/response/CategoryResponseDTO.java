@@ -18,7 +18,7 @@ public class CategoryResponseDTO extends CategoryRequestDTO {
     LocalDateTime createdDate;
     Boolean visible;
 
-    public CategoryResponseDTO toDTO(CategoryEntity entity) {
+    public static CategoryResponseDTO toDTO(CategoryEntity entity) {
         CategoryResponseDTO response = new CategoryResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());

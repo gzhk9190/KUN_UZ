@@ -17,4 +17,9 @@ public interface RegionRepository extends JpaRepository<RegionEntity, String> {
 
     @Query(value = "update ProfileEntity set visible = false where id = ?1")
     void updateVisible(String id);
+
+    Optional<RegionEntity> findByNameEnAndVisibleIsTrue(String nameEn);
+
+    Optional<RegionEntity> findByNameRuAndVisibleIsTrue(String nameRu);
+    
 }
