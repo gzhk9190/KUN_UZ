@@ -17,7 +17,7 @@ public class SavedArticleService {
         return null;
     }
 
-    public SavedArticleResponseDTO update(@Valid SavedArticleRequestDTO savedArticleRequestDTO) {
+    public SavedArticleResponseDTO update(String id, @Valid SavedArticleRequestDTO savedArticleRequestDTO) {
         return null;
     }
 

@@ -18,7 +18,7 @@ public class ArticleLikeService {
         return null;
     }
 
-    public ArticleLikeResponseDTO update(@Valid ArticleLikeRequestDTO articleRequestDTO) {
+    public ArticleLikeResponseDTO update(String id, @Valid ArticleLikeRequestDTO articleRequestDTO) {
         return null;
     }
 

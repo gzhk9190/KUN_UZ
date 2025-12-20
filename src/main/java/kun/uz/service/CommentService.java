@@ -17,7 +17,7 @@ public class CommentService {
         return null;
     }
 
-    public CommentResponseDTO update(@Valid CommentRequestDTO commentRequestDTO) {
+    public CommentResponseDTO update(String id, @Valid CommentRequestDTO commentRequestDTO) {
         return null;
     }
 

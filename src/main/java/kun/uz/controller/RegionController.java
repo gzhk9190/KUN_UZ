@@ -18,13 +18,13 @@ public class RegionController {
     private final RegionService regionService;
 
     @PostMapping("/create")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN')")
     public ApiResponse<RegionResponseDTO> create(@Valid @RequestBody RegionRequestDTO regionRequestDTO) {
         return regionService.create(regionRequestDTO);
     }
     @PutMapping("/update/{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ApiResponse<RegionResponseDTO> update(@RequestParam("id") String id ,@Valid @RequestBody RegionRequestDTO regionRequestDTO) {
+    public ApiResponse<RegionResponseDTO> update(@PathVariable("id") String id , @Valid @RequestBody RegionRequestDTO regionRequestDTO) {
         return regionService.update(id, regionRequestDTO);
     }
     @GetMapping("/get/{id}")

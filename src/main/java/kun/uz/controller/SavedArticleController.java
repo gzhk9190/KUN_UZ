@@ -6,6 +6,7 @@ import kun.uz.dto.response.SavedArticleResponseDTO;
 import kun.uz.service.SavedArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +16,15 @@ import java.util.List;
 @RequestMapping("/api/saved/article")
 public class SavedArticleController {
     private final SavedArticleService savedArticleService;
-
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<SavedArticleResponseDTO> create(@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {
         return ResponseEntity.ok(savedArticleService.create(savedArticleRequestDTO));
     }
-    @PutMapping("/update")
-    public SavedArticleResponseDTO update(@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {
-        return savedArticleService.update(savedArticleRequestDTO);
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PutMapping("/update/{id}")
+    public SavedArticleResponseDTO update(@PathVariable("Id")String id,@Valid @RequestBody SavedArticleRequestDTO savedArticleRequestDTO) {
+        return savedArticleService.update(id,savedArticleRequestDTO);
     }
     @GetMapping("/get/{id}")
     public SavedArticleResponseDTO get(@PathVariable("id") String id) {
@@ -30,8 +32,10 @@ public class SavedArticleController {
     }
     @GetMapping("/getAll")
     public List<SavedArticleResponseDTO> getAll() {
+
         return savedArticleService.getAll();
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return savedArticleService.delete(id);

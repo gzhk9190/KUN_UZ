@@ -6,6 +6,7 @@ import kun.uz.dto.response.CategoryResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +16,15 @@ import java.util.List;
 @RequestMapping("/api/category")
 public class CategoryController {
     private final CategoryService categoryService;
-
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public CategoryResponseDTO create(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
         return categoryService.create(categoryRequestDTO);
     }
-    @PutMapping("/update")
-    public CategoryResponseDTO update(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
-        return categoryService.update(categoryRequestDTO);
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PutMapping("/update/{id}")
+    public CategoryResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+        return categoryService.update(id,categoryRequestDTO);
     }
     @GetMapping("/get/{id}")
     public CategoryResponseDTO get(@PathVariable("id") String id) {
@@ -32,6 +34,7 @@ public class CategoryController {
     public List<CategoryResponseDTO> getAll() {
         return categoryService.getAll();
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return categoryService.delete(id);

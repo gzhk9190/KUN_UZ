@@ -17,7 +17,7 @@ public class ArticleService {
         return null;
     }
 
-    public ArticleResponseDTO update(@Valid ArticleRequestDTO articleRequestDTO) {
+    public ArticleResponseDTO update(String id, @Valid ArticleRequestDTO articleRequestDTO) {
         return null;
     }
 

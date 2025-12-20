@@ -17,7 +17,7 @@ public class CategoryService {
         return null;
     }
 
-    public CategoryResponseDTO update(@Valid CategoryRequestDTO categoryRequestDTO) {
+    public CategoryResponseDTO update(String id, @Valid CategoryRequestDTO categoryRequestDTO) {
         return  null;
     }
 

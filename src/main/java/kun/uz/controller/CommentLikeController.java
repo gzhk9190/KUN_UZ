@@ -6,6 +6,7 @@ import kun.uz.dto.response.CommentLikeResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,13 +17,15 @@ import java.util.List;
 public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public CommentLikeResponseDTO create(@Valid @RequestBody CommentLikeRequestDTO commentLikeRequestDTO) {
         return commentLikeService.create(commentLikeRequestDTO);
     }
-    @PutMapping("/update")
-    public CommentLikeResponseDTO update(@Valid @RequestBody CommentLikeRequestDTO commentLikeRequestDTO) {
-        return commentLikeService.update(commentLikeRequestDTO);
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PutMapping("/update/{id}")
+    public CommentLikeResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody CommentLikeRequestDTO commentLikeRequestDTO) {
+        return commentLikeService.update(id,commentLikeRequestDTO);
     }
     @GetMapping("/get/{id}")
     public CommentLikeResponseDTO get(@PathVariable("id") String id) {
@@ -32,6 +35,7 @@ public class CommentLikeController {
     public List<CommentLikeResponseDTO> getAll() {
         return commentLikeService.getAll();
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return commentLikeService.delete(id);

@@ -6,6 +6,7 @@ import kun.uz.dto.response.CommentResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,14 +16,16 @@ import java.util.List;
 @RequestMapping("/api/comment/main")
 public class CommentController {
     private final CommentService commentService;
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 
     @PostMapping("/create")
     public CommentResponseDTO create(@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
         return commentService.create(commentRequestDTO);
     }
-    @PutMapping("/update")
-    public CommentResponseDTO update(@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
-        return commentService.update(commentRequestDTO);
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @PutMapping("/update/{id}")
+    public CommentResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
+        return commentService.update(id,commentRequestDTO);
     }
     @GetMapping("/get/{id}")
     public CommentResponseDTO get(@PathVariable("id") String id) {
@@ -32,6 +35,7 @@ public class CommentController {
     public List<CommentResponseDTO> getAll() {
         return commentService.getAll();
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return commentService.delete(id);

@@ -17,7 +17,7 @@ public class ProfileService {
         return null;
     }
 
-    public ProfileResponseDTO update(@Valid ProfileRequestDTO profileRequestDTO) {
+    public ProfileResponseDTO update(String id, @Valid ProfileRequestDTO profileRequestDTO) {
         return null;
     }
 

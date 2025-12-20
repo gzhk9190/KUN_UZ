@@ -1,5 +1,6 @@
 package kun.uz.exp.handler;
 
+import kun.uz.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
