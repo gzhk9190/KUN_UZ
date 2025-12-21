@@ -2,6 +2,7 @@ package kun.uz.controller;
 
 import jakarta.validation.Valid;
 import kun.uz.dto.request.CategoryRequestDTO;
+import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.CategoryResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CategoryService;
@@ -18,20 +19,20 @@ public class CategoryController {
     private final CategoryService categoryService;
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
-    public CategoryResponseDTO create(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+    public ApiResponse<CategoryResponseDTO> create(@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
         return categoryService.create(categoryRequestDTO);
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
-    public CategoryResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
+    public ApiResponse<CategoryResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody CategoryRequestDTO categoryRequestDTO) {
         return categoryService.update(id,categoryRequestDTO);
     }
     @GetMapping("/get/{id}")
-    public CategoryResponseDTO get(@PathVariable("id") String id) {
+    public ApiResponse<CategoryResponseDTO> get(@PathVariable("id") String id) {
         return categoryService.getById(id);
     }
     @GetMapping("/getAll")
-    public List<CategoryResponseDTO> getAll() {
+    public ApiResponse<List<CategoryResponseDTO>> getAll() {
         return categoryService.getAll();
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")

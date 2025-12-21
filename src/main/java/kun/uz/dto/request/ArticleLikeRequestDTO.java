@@ -1,5 +1,6 @@
 package kun.uz.dto.request;
 
+import kun.uz.enums.ArticleLikeStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,9 +10,9 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ArticleLikeRequestDTO {
-    String profile_id;
-    String article_id;
-
+    String profileId;
+    String articleId;
+    ArticleLikeStatus status;
     public ArticleLikeRequestDTO() {
     }
 }

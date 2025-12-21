@@ -2,6 +2,7 @@ package kun.uz.controller;
 
 import jakarta.validation.Valid;
 import kun.uz.dto.request.CommentRequestDTO;
+import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.CommentResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CommentService;
@@ -17,22 +18,21 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-
     @PostMapping("/create")
-    public CommentResponseDTO create(@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
+    public ApiResponse<CommentResponseDTO> create(@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
         return commentService.create(commentRequestDTO);
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
-    public CommentResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
+    public ApiResponse<CommentResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody CommentRequestDTO commentRequestDTO  ) {
         return commentService.update(id,commentRequestDTO);
     }
     @GetMapping("/get/{id}")
-    public CommentResponseDTO get(@PathVariable("id") String id) {
+    public ApiResponse<CommentResponseDTO> get(@PathVariable("id") String id) {
         return commentService.getById(id);
     }
     @GetMapping("/getAll")
-    public List<CommentResponseDTO> getAll() {
+    public ApiResponse<List<CommentResponseDTO>> getAll() {
         return commentService.getAll();
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")

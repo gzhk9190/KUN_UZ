@@ -22,17 +22,13 @@ public class ArticleLikeResponseDTO extends ArticleLikeRequestDTO {
     public ArticleLikeResponseDTO() {
     }
 
-    public ArticleLikeResponseDTO(String profile_id, String article_id) {
-        super(profile_id, article_id);
-    }
-
     public static ArticleLikeResponseDTO toDTO(ArticleLikeEntity entity) {
         ArticleLikeResponseDTO response = new ArticleLikeResponseDTO();
-        response.setArticle_id(entity.getArticle().getId());
+        response.setArticleId(entity.getArticle().getId());
         response.setId(entity.getId());
         response.setVisible(entity.getVisible());
         response.setCreatedDate(entity.getCreateDate());
-        response.setProfile_id(entity.getProfile().getId());
+        response.setProfileId(entity.getProfile().getId());
         return response;
     }
 }

@@ -41,23 +41,28 @@ public class SavedArticleService {
         return ApiResponse.success(SavedArticleResponseDTO.toDTO(saved));
     }
 
-    public ApiResponse<SavedArticleResponseDTO> update(String id, @Valid SavedArticleRequestDTO regionRequestDTO) {
+    public ApiResponse<SavedArticleResponseDTO> update(String id, @Valid SavedArticleRequestDTO dto) {
         SavedArticleEntity entity = get(id);
         if (Objects.isNull(entity)) {
             return ApiResponse.badRequest("Topilmadi");
         }
-        entity.setNameUz(regionRequestDTO.getNameUz());
-        entity.setNameEn(regionRequestDTO.getNameEn());
-        entity.setNameRu(regionRequestDTO.getNameRu());
-        entity.setOrderNumber(regionRequestDTO.getOrderNumber());
+        Optional<SavedArticleEntity> optional = savedArticleRepo.findByProfileIdAndVisibleIsTrue((dto.getProfileId()));
+        if (optional.isEmpty()) {
+            return ApiResponse.badRequest("Bunday id li profile yo'q-ku");
+        }
+        Optional<SavedArticleEntity>optional1=savedArticleRepo.findByArticleIdAndVisibleIsTrue(dto.getArticleId());
+        if (optional1.isEmpty()){
+            return ApiResponse.badRequest("Bunday  id li article yo'q-ku");
+        }
+        entity.setArticleId(dto.getArticleId());
+        entity.setProfileId(dto.getProfileId());
         return ApiResponse.success(SavedArticleResponseDTO.toDTO(savedArticleRepo.save(entity)));
-        // TODO update qiling
     }
 
     public ApiResponse<SavedArticleResponseDTO> getById(String id) {
         Optional<SavedArticleEntity> optional = savedArticleRepo.findByIdAndVisibleIsTrue(id);
         if (optional.isEmpty()) {
-            return ApiResponse.badRequest("Bunday viloyat yoki shahar mavjud emas");
+            return ApiResponse.badRequest("Bunday savedArticle mavjud emas");
         } else {
             return ApiResponse.success(SavedArticleResponseDTO.toDTO(optional.get()));
         }

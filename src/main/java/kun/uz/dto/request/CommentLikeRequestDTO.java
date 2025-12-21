@@ -1,5 +1,6 @@
 package kun.uz.dto.request;
 
+import kun.uz.enums.CommentLikeStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class CommentLikeRequestDTO {
     String profileId;
     String commentId;
-
+    CommentLikeStatus status;
     public CommentLikeRequestDTO() {
     }
 }

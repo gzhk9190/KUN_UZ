@@ -2,6 +2,7 @@ package kun.uz.controller;
 
 import jakarta.validation.Valid;
 import kun.uz.dto.request.ProfileRequestDTO;
+import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -18,20 +19,20 @@ public class ProfileController {
 
     @PostMapping("/create")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public ProfileResponseDTO create(@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
+    public ApiResponse<ProfileResponseDTO> create(@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
         return profileService.create(profileRequestDTO);
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
-    public ProfileResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
+    public ApiResponse<ProfileResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
         return profileService.update(id,profileRequestDTO);
     }
     @GetMapping("/get/{id}")
-    public ProfileResponseDTO get(@PathVariable("id") String id) {
+    public ApiResponse<ProfileResponseDTO> get(@PathVariable("id") String id) {
         return profileService.getById(id);
     }
     @GetMapping("/getAll")
-    public List<ProfileResponseDTO> getAll() {
+    public ApiResponse<List<ProfileResponseDTO>> getAll() {
         return profileService.getAll();
     }
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
