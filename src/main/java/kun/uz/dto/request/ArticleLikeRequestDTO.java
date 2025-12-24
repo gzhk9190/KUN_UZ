@@ -10,9 +10,10 @@ import lombok.experimental.FieldDefaults;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ArticleLikeRequestDTO {
-    String profileId;
     String articleId;
     ArticleLikeStatus status;
+
     public ArticleLikeRequestDTO() {
+
     }
 }

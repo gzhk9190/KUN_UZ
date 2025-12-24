@@ -20,6 +20,7 @@ public class CustomUserDetails implements UserDetails {
     @Getter
     String id;
     String login;
+    @Getter
     ProfileRole role;
 
     public CustomUserDetails(String id, String login, ProfileRole role) {

@@ -16,12 +16,12 @@ import java.util.List;
 @RequestMapping("/api/article/like")
 public class ArticleLikeController {
     private final ArticleLikeService articleLikeService;
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+
     @PostMapping("/create")
     public ApiResponse<ArticleLikeResponseDTO> create(@Valid @RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
         return articleLikeService.create(articleLikeRequestDTO);
     }
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+
     @PutMapping("/update/{id}")
     public ApiResponse<ArticleLikeResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
         return articleLikeService.update(id,articleLikeRequestDTO);
@@ -34,9 +34,9 @@ public class ArticleLikeController {
     public ApiResponse<List<ArticleLikeResponseDTO>> getAll() {
         return articleLikeService.getAll();
     }
+
     @PutMapping("/delete/{id}")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
-    public Boolean delete(@PathVariable String id) {
+    public ApiResponse<Boolean> delete(@PathVariable String id) {
         return articleLikeService.delete(id);
     }
 }

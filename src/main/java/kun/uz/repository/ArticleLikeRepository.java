@@ -16,6 +16,11 @@ public interface ArticleLikeRepository extends JpaRepository<ArticleLikeEntity, 
     Optional<ArticleLikeEntity> findAllByVisibleIsTrue();
     @Modifying
     @Transactional
+    @Query(value = "update ArticleLikeEntity set visible = false where id = ?1 and profileId = ?2")
+    int updateVisible(String id, String profileId);
+
+    @Modifying
+    @Transactional
     @Query(value = "update ArticleLikeEntity set visible = false where id = ?1")
     void updateVisible(String id);
 }

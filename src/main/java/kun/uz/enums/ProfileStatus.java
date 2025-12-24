@@ -1,5 +1,5 @@
 package kun.uz.enums;
 
 public enum ProfileStatus {
-    ACTIVE, BLOCKED
+    ACTIVE, BLOCKED, NOT_ACTIVE
 }

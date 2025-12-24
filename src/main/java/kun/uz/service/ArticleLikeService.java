@@ -1,12 +1,15 @@
 package kun.uz.service;
 
 import jakarta.validation.Valid;
+import kun.uz.config.details.CustomUserDetails;
+import kun.uz.config.details.EntityDetails;
 import kun.uz.dto.request.ArticleLikeRequestDTO;
 import kun.uz.dto.request.ArticleLikeRequestDTO;
 import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.entities.ArticleLikeEntity;
+import kun.uz.enums.ProfileRole;
 import kun.uz.repository.ArticleLikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +28,13 @@ public class ArticleLikeService {
     private final ProfileService pService;
     private final ArticleService aService;
     public ApiResponse<ArticleLikeResponseDTO> create(@Valid ArticleLikeRequestDTO dto) {
-        if (Objects.isNull(pService.getById(dto.getProfileId()))) {
-            return ApiResponse.badRequest("Bunday id li profile mavjud emas");
-        }
+
         if (Objects.isNull(aService.getById(dto.getArticleId()))) {
             return ApiResponse.badRequest("Bunday  id li article mavjud emas");
         }
         ArticleLikeEntity entity = new ArticleLikeEntity();
         entity.setArticleId(dto.getArticleId());
-        entity.setProfileId(dto.getProfileId());
+        entity.setProfileId(EntityDetails.getId());
         entity.setStatus(dto.getStatus());
         ArticleLikeEntity saved = repository.save(entity);
         return ApiResponse.success(ArticleLikeResponseDTO.toDTO(saved));
@@ -42,8 +43,6 @@ public class ArticleLikeService {
     public ApiResponse<ArticleLikeResponseDTO> update(String id, @Valid ArticleLikeRequestDTO dto) {
 
         ArticleLikeEntity entity = get(id);
-        entity.setArticleId(dto.getArticleId());
-        entity.setProfileId(dto.getProfileId());
         entity.setStatus(dto.getStatus());
         ArticleLikeEntity saved = repository.save(entity);
         return ApiResponse.success(ArticleLikeResponseDTO.toDTO(saved));
@@ -67,8 +66,19 @@ public class ArticleLikeService {
         return ApiResponse.success(repository.findAllByVisibleIsTrue().stream().map(ArticleLikeResponseDTO::toDTO).toList());
     }
 
-    public Boolean delete(String id) {
-        repository.updateVisible(id);
-        return true;
+    public ApiResponse<Boolean> delete(String id) {
+        if (EntityDetails.getRole().equals(ProfileRole.ROLE_ADMIN)) {
+            repository.updateVisible(id);
+        } else {
+            ArticleLikeEntity entity = get(id);
+            if (Objects.nonNull(entity)) {
+                if (entity.getProfileId().equals(EntityDetails.getId())) {
+                    repository.updateVisible(id);
+                } else {
+                    return ApiResponse.forbidden("Bu likeni o'chirish uchun huquqingiz yo'q");
+                }
+            }
+        }
+        return ApiResponse.success(true);
     }
 }

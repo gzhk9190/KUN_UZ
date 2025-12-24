@@ -28,7 +28,6 @@ public class ArticleLikeResponseDTO extends ArticleLikeRequestDTO {
         response.setId(entity.getId());
         response.setVisible(entity.getVisible());
         response.setCreatedDate(entity.getCreateDate());
-        response.setProfileId(entity.getProfile().getId());
         return response;
     }
 }
