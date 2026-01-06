@@ -1,7 +1,7 @@
 package kun.uz.entities;
 
 import jakarta.persistence.*;
-import kun.uz.entities.base.BaseEntity;
+        import kun.uz.entities.base.BaseEntity;
 import kun.uz.enums.ArticleLikeStatus;
 import lombok.AccessLevel;
 import lombok.Getter;

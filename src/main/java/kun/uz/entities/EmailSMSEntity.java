@@ -24,5 +24,4 @@ public class EmailSMSEntity extends BaseEntity {
     String email;
     Integer code;
     Boolean used;
-
 }

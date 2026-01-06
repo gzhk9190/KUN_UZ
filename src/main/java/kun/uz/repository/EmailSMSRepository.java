@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface EmailSMSRepository extends JpaRepository<EmailSMSEntity, String> {
     Optional<EmailSMSEntity> findTop1ByUsedIsFalseAndEmailAndVisibleIsTrueOrderByCreateDateDesc(String email);
+
+    EmailSMSEntity getByEmailAndVisibleIsTrue(String email, Boolean visible);
 }

@@ -1,15 +1,64 @@
 package kun.uz.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kun.uz.dto.request.AttachRequestDTO;
 import kun.uz.dto.response.AttachResponseDTO;
+import kun.uz.enums.ProfileRole;
 import kun.uz.service.AttachService;
+import kun.uz.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/attach")
 public class AttachController {
+    @Autowired
+    private AttachService attachService;
 
+    @PostMapping("/upload")
+    public ResponseEntity<?> create (@RequestParam("file") MultipartFile file){
+        return ResponseEntity.ok(attachService.upload(file));
+    }
+
+    @GetMapping(value = "/open/{fileName}", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] open(@PathVariable("fileName") String fileName){
+        return attachService.open(fileName);
+    }
+
+    @GetMapping(value = "/open_general/{fileName}", produces = MediaType.ALL_VALUE)
+    public byte[] open_general(@PathVariable("fileName") String fileName){
+        return attachService.open_general(fileName);
+    }
+
+    @GetMapping("/download/{fileName}")
+    public Resource download(@PathVariable("fileName") String fileName) {
+        return attachService.download(fileName);
+    }
+
+    @GetMapping("/adm/list")
+    public ResponseEntity<?> getList(@RequestParam(name = "page", defaultValue = "0") int page,
+                                     @RequestParam(name = "size", defaultValue = "5") int size,
+                                     HttpServletRequest request){
+        JwtUtil.getIdFromHeader(request, ProfileRole.ROLE_ADMIN);
+        return ResponseEntity.ok(attachService.getList(page, size));
+    }
+
+    @GetMapping("/adm/get{id}")
+    public ResponseEntity<?> getById(@PathVariable("id")String id,
+                                     HttpServletRequest request){
+        JwtUtil.getIdFromHeader(request, ProfileRole.ROLE_ADMIN);
+        return ResponseEntity.ok(attachService.getById(id));
+    }
+
+    @DeleteMapping("/adm/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id")String id,
+                                    HttpServletRequest request){
+        JwtUtil.getIdFromHeader(request, ProfileRole.ROLE_ADMIN);
+        return ResponseEntity.ok(attachService.delete(id));
+    }
 }
