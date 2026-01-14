@@ -40,4 +40,5 @@ public class SavedArticleController {
     public Boolean delete(@PathVariable String id) {
         return savedArticleService.delete(id);
     }
+
 }

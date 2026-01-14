@@ -9,6 +9,7 @@ import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.entities.ArticleLikeEntity;
+import kun.uz.enums.ArticleLikeStatus;
 import kun.uz.enums.ProfileRole;
 import kun.uz.repository.ArticleLikeRepository;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +81,28 @@ public class ArticleLikeService {
             }
         }
         return ApiResponse.success(true);
+    }
+
+    public ApiResponse<ArticleLikeResponseDTO> like(String articleId) {
+        if (Objects.isNull(aService.getById(articleId))) {
+            return ApiResponse.badRequest("Bunday  id li article mavjud emas");
+        }
+        ArticleLikeEntity entity = new ArticleLikeEntity();
+        entity.setArticleId(articleId);
+        entity.setProfileId(EntityDetails.getId());
+        entity.setStatus(ArticleLikeStatus.LIKE);
+        ArticleLikeEntity saved = repository.save(entity);
+        return ApiResponse.success(ArticleLikeResponseDTO.toDTO(saved));
+    }
+    public ApiResponse<ArticleLikeResponseDTO> dislike(String articleId) {
+        if (Objects.isNull(aService.getById(articleId))) {
+            return ApiResponse.badRequest("Bunday  id li article mavjud emas");
+        }
+        ArticleLikeEntity entity = new ArticleLikeEntity();
+        entity.setArticleId(articleId);
+        entity.setProfileId(EntityDetails.getId());
+        entity.setStatus(ArticleLikeStatus.DISLIKE);
+        ArticleLikeEntity saved = repository.save(entity);
+        return ApiResponse.success(ArticleLikeResponseDTO.toDTO(saved));
     }
 }

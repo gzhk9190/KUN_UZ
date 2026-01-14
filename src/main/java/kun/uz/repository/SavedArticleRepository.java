@@ -17,6 +17,8 @@ public interface SavedArticleRepository extends JpaRepository<SavedArticleEntity
     Optional<SavedArticleEntity> findByIdAndVisibleIsTrue(String id);
 
     List<SavedArticleEntity> findAllByVisibleIsTrue();
+
+
     @Modifying
     @Transactional
     @Query(value = "update SavedArticleEntity set visible = false where id = ?1")

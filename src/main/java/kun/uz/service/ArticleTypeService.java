@@ -5,10 +5,15 @@ import kun.uz.dto.request.ArticleTypeRequestDTO;
 import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ArticleTypeResponseDTO;
 import kun.uz.entities.ArticleTypeEntity;
+import kun.uz.repository.ArticleRepository;
 import kun.uz.repository.ArticleTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +24,8 @@ import java.util.Optional;
 @Slf4j
 public class ArticleTypeService {
     private final ArticleTypeRepository repository;
+    private final ArticleRepository articleRepository;
+
     public ApiResponse<ArticleTypeResponseDTO> create(@Valid ArticleTypeRequestDTO dto) {
         if (Objects.isNull(dto.getOrderNumber())) {
             return ApiResponse.badRequest("Order number null bo'lmasligi shart!");
@@ -90,5 +97,25 @@ public class ArticleTypeService {
     public Boolean delete(String id) {
         repository.updateVisible(id);
         return true;
+    }
+
+    public @Nullable Page<ArticleTypeResponseDTO> getPagination(Pageable pageable) {
+        return repository.findByVisible(true, pageable).map(this::toDTO);
+    }
+    public ArticleTypeResponseDTO toDTO(ArticleTypeEntity entity) {
+        return ArticleTypeResponseDTO.toDTO(entity);
+    }
+
+    public ApiResponse<List<ArticleTypeResponseDTO>> getByLang(String lang) {
+        switch (lang){
+            case "en"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameEnIsNotNull().stream().map(ArticleTypeResponseDTO::toDTO).toList());
+            }case "uz"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameUzIsNotNull().stream().map(ArticleTypeResponseDTO::toDTO).toList());
+            }case "ru"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameRuIsNotNull().stream().map(ArticleTypeResponseDTO::toDTO).toList());
+            }
+        }
+        return ApiResponse.badRequest("Language not exists");
     }
 }

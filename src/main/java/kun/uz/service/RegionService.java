@@ -3,11 +3,17 @@ package kun.uz.service;
 import jakarta.validation.Valid;
 import kun.uz.dto.request.RegionRequestDTO;
 import kun.uz.dto.response.ApiResponse;
+import kun.uz.dto.response.ArticleTypeResponseDTO;
+import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.dto.response.RegionResponseDTO;
+import kun.uz.entities.ProfileEntity;
 import kun.uz.entities.RegionEntity;
 import kun.uz.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,5 +83,25 @@ public class RegionService {
     public Boolean delete(String id) {
         regionRepository.updateVisible(id);
         return true;
+    }
+
+    public @Nullable Page<RegionResponseDTO> getPagination(Pageable pageable) {
+        return regionRepository.findByVisible(true, pageable).map(this::toDTO);
+    }
+    public RegionResponseDTO toDTO(RegionEntity entity) {
+        return RegionResponseDTO.toDTO(entity);
+    }
+
+    public ApiResponse<List<RegionResponseDTO>> getByLang(String lang) {
+        switch (lang){
+            case "en"->{
+                return ApiResponse.success(regionRepository.findAllByVisibleIsTrueAndNameEnIsNotNull().stream().map(RegionResponseDTO::toDTO).toList());
+            }case "uz"->{
+                return ApiResponse.success(regionRepository.findAllByVisibleIsTrueAndNameUzIsNotNull().stream().map(RegionResponseDTO::toDTO).toList());
+            }case "ru"->{
+                return ApiResponse.success(regionRepository.findAllByVisibleIsTrueAndNameRuIsNotNull().stream().map(RegionResponseDTO::toDTO).toList());
+            }
+        }
+        return ApiResponse.badRequest("Language not exists");
     }
 }

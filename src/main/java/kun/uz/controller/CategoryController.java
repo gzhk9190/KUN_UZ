@@ -40,4 +40,9 @@ public class CategoryController {
     public Boolean delete(@PathVariable String id) {
         return categoryService.delete(id);
     }
+
+    @GetMapping("/getByLang")
+    public ApiResponse<List<CategoryResponseDTO>> getByLang(String lang) {
+        return categoryService.getByLang( lang);
+    }
 }

@@ -8,7 +8,11 @@ import kun.uz.entities.CommentEntity;
 import kun.uz.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -88,5 +92,21 @@ public class CommentService {
     public Boolean delete(String id) {
         repository.updateVisible(id);
         return true;
+    }
+
+    public ApiResponse<List<CommentResponseDTO>> getAllByArticleId(String id) {
+        return ApiResponse.success(repository.findAllByVisibleIsTrueAndArticleId(id).stream().map(CommentResponseDTO::toDTO).toList());
+    }
+
+    public @Nullable Page<CommentResponseDTO> getPagination(Pageable pageable) {
+        return repository.findByVisible(true, pageable)
+                .map(this::toDTO);
+    }
+    public CommentResponseDTO toDTO(CommentEntity entity) {
+        return CommentResponseDTO.toDTO(entity);
+    }
+
+    public ApiResponse<List<CommentResponseDTO>> getRepliedCommentsByCommentId(String commentId) {
+        return ApiResponse.success(repository.getAllByReplyId(commentId).stream().map(CommentResponseDTO::toDTO).toList());
     }
 }

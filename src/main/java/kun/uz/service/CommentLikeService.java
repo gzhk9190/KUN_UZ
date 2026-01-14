@@ -1,10 +1,15 @@
 package kun.uz.service;
 
 import jakarta.validation.Valid;
+import kun.uz.config.details.EntityDetails;
 import kun.uz.dto.request.CommentLikeRequestDTO;
 import kun.uz.dto.response.ApiResponse;
+import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.dto.response.CommentLikeResponseDTO;
+import kun.uz.entities.ArticleLikeEntity;
 import kun.uz.entities.CommentLikeEntity;
+import kun.uz.enums.ArticleLikeStatus;
+import kun.uz.enums.CommentLikeStatus;
 import kun.uz.repository.CommentLikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +77,27 @@ public class CommentLikeService {
     public Boolean delete(String id) {
         repository.updateVisible(id);
         return true;
+    }
+    public ApiResponse<CommentLikeResponseDTO> like(String cId) {
+        if (Objects.isNull(commentService.getById(cId))) {
+            return ApiResponse.badRequest("Bunday  id li comment mavjud emas");
+        }
+        CommentLikeEntity entity = new CommentLikeEntity();
+        entity.setCommentId(cId);
+        entity.setProfileId(EntityDetails.getId());
+        entity.setStatus(CommentLikeStatus.LIKE);
+        CommentLikeEntity saved = repository.save(entity);
+        return ApiResponse.success(CommentLikeResponseDTO.toDTO(saved));
+    }
+    public ApiResponse<CommentLikeResponseDTO> dislike(String cId) {
+        if (Objects.isNull(commentService.getById(cId))) {
+            return ApiResponse.badRequest("Bunday  id li comment mavjud emas");
+        }
+        CommentLikeEntity entity = new CommentLikeEntity();
+        entity.setCommentId(cId);
+        entity.setProfileId(EntityDetails.getId());
+        entity.setStatus(CommentLikeStatus.DISLIKE);
+        CommentLikeEntity saved = repository.save(entity);
+        return ApiResponse.success(CommentLikeResponseDTO.toDTO(saved));
     }
 }

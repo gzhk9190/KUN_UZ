@@ -91,4 +91,17 @@ public class CategoryService {
         repository.updateVisible(id);
         return true;
     }
+
+    public ApiResponse<List<CategoryResponseDTO>> getByLang(String lang) {
+        switch (lang){
+            case "en"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameEnIsNotNull().stream().map(CategoryResponseDTO::toDTO).toList());
+            }case "uz"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameUzIsNotNull().stream().map(CategoryResponseDTO::toDTO).toList());
+            }case "ru"->{
+                return ApiResponse.success(repository.findAllByVisibleIsTrueAndNameRuIsNotNull().stream().map(CategoryResponseDTO::toDTO).toList());
+            }
+        }
+        return ApiResponse.badRequest("Language not exists");
+    }
 }

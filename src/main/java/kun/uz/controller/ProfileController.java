@@ -6,6 +6,9 @@ import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,19 +25,40 @@ public class ProfileController {
     public ApiResponse<ProfileResponseDTO> create(@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
         return profileService.create(profileRequestDTO);
     }
+
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
-    public ApiResponse<ProfileResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
-        return profileService.update(id,profileRequestDTO);
+    public ApiResponse<ProfileResponseDTO> update(@PathVariable("id") String id, @Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
+        return profileService.update(id, profileRequestDTO);
     }
+
+    @PutMapping("/update/")
+    public ApiResponse<ProfileResponseDTO> updateDetail(@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
+        return profileService.updateDetail(profileRequestDTO);
+    }
+
+    @PutMapping("/update/photo/")
+    public ApiResponse<ProfileResponseDTO> updatePhoto(@Valid @RequestBody String photoId) {
+        return profileService.updatePhoto(photoId);
+    }
+
     @GetMapping("/get/{id}")
     public ApiResponse<ProfileResponseDTO> get(@PathVariable("id") String id) {
         return profileService.getById(id);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<ProfileResponseDTO>> getPaginationList(
+            Pageable pageable) {
+        return ResponseEntity.ok(profileService.getPagination(pageable));
+    }
+
     @GetMapping("/getAll")
     public ApiResponse<List<ProfileResponseDTO>> getAll() {
         return profileService.getAll();
     }
+
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {

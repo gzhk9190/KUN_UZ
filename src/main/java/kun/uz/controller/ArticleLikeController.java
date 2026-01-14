@@ -37,6 +37,15 @@ public class ArticleLikeController {
 
     @PutMapping("/delete/{id}")
     public ApiResponse<Boolean> delete(@PathVariable String id) {
-        return articleLikeService.delete(id);
+
+        return articleLikeService.delete(id);}
+
+    @PutMapping("/like/{articleId}")
+    public ApiResponse<ArticleLikeResponseDTO> like(@PathVariable("articleId")String aId) {
+        return articleLikeService.like(aId);
+    }
+    @PutMapping("/dislike/{articleId}")
+    public ApiResponse<ArticleLikeResponseDTO> dislike(@PathVariable("articleId")String aId) {
+        return articleLikeService.dislike(aId);
     }
 }

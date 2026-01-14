@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import kun.uz.dto.request.CommentLikeRequestDTO;
 import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.CommentLikeResponseDTO;
+import kun.uz.dto.response.CommentLikeResponseDTO;
 import kun.uz.service.ArticleService;
 import kun.uz.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
@@ -40,5 +41,13 @@ public class CommentLikeController {
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return commentLikeService.delete(id);
+    }
+    @PutMapping("/like/{cId}")
+    public ApiResponse<CommentLikeResponseDTO> like(@PathVariable("cId")String cId) {
+        return commentLikeService.like(cId);
+    }
+    @PutMapping("/dislike/{cId}")
+    public ApiResponse<CommentLikeResponseDTO> dislike(@PathVariable("cId")String cId) {
+        return commentLikeService.dislike(cId);
     }
 }

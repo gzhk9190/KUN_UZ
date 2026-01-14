@@ -1,6 +1,7 @@
 package kun.uz.service;
 
 import io.jsonwebtoken.JwtException;
+import kun.uz.dto.request.auth.AuthRequestDTO;
 import kun.uz.dto.request.auth.RegistrationRequestDTO;
 import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ProfileResponseDTO;
@@ -13,16 +14,15 @@ import kun.uz.repository.EmailSMSRepository;
 import kun.uz.repository.ProfileRepository;
 import kun.uz.util.JwtUtil;
 import kun.uz.validation.RegistrationValidation;
-import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -58,7 +58,6 @@ public class AuthService {
 
         RegistrationValidation.isValid(dto);
         ProfileEntity profileEntity = profileRepository.findByEmailAndVisibleIsTrue(dto.getEmail());
-
         if (profileEntity != null) {
             if (!profileEntity.getStatus().equals(ProfileStatus.NOT_ACTIVE)) {
                 throw new EmailAlreadyExistsException("Email Already Exists");
@@ -66,6 +65,7 @@ public class AuthService {
                 profileRepository.delete(profileEntity);
             }
         }
+
         ProfileEntity entity = new ProfileEntity();
         entity.setEmail(dto.getEmail());
         entity.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -77,6 +77,15 @@ public class AuthService {
         entity.setStatus(ProfileStatus.NOT_ACTIVE);
         profileRepository.save(entity);
 
+        if (!Objects.isNull(dto.getEmail())) {
+            emailSender(dto);
+        }
+        return ApiResponse.success("Zo'rkuuu");
+    }
+    public void smsSender(RegistrationRequestDTO dto) {
+        
+    }
+    public void emailSender(RegistrationRequestDTO dto) {
         Integer code = random.nextInt(10000, 99999);
         EmailSMSEntity smsEntity = new EmailSMSEntity();
         smsEntity.setEmail(dto.getEmail());
@@ -84,8 +93,6 @@ public class AuthService {
         smsEntity.setUsed(false);
         emailSMSRepository.save(smsEntity);
         send(dto.getEmail(), code);
-
-        return ApiResponse.success("Zo'rkuuu");
     }
     public ApiResponse<String> verification(String jwt){
         String userId = null;
@@ -109,7 +116,7 @@ public class AuthService {
         return ApiResponse.success("User Id :"+userId+" Ga teng bo'lgan Profile muvoffaqiyatli ro'yxatdan o'tdi!!!");
     }
 
-    public ProfileResponseDTO login(RegistrationRequestDTO dto) {
+    public ProfileResponseDTO login(AuthRequestDTO dto) {
         String pswd = passwordEncoder.encode(dto.getPassword());
         ProfileEntity profileEntity = profileRepository.findByEmailAndPasswordAndVisibleIsTrue(dto.getEmail(),pswd);
         if (profileEntity == null) {

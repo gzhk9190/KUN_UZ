@@ -1,11 +1,16 @@
 package kun.uz.controller;
 
 import jakarta.validation.Valid;
+import kun.uz.dto.request.ProfileRequestDTO;
 import kun.uz.dto.request.RegionRequestDTO;
 import kun.uz.dto.response.ApiResponse;
+import kun.uz.dto.response.ArticleTypeResponseDTO;
 import kun.uz.dto.response.RegionResponseDTO;
 import kun.uz.service.RegionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +46,18 @@ public class RegionController {
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public Boolean delete(@PathVariable String id) {
         return regionService.delete(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<RegionResponseDTO>> getPaginationList(
+            Pageable pageable) {
+
+        return ResponseEntity.ok(regionService.getPagination(pageable));
+    }
+
+    @GetMapping("/getByLang")
+    public ApiResponse<List<RegionResponseDTO>> getByLang(String lang) {
+        return regionService.getByLang( lang);
     }
 }

@@ -18,27 +18,33 @@ import java.util.List;
 
 public class ArticleController {
     private final ArticleService articleService;
+    
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ArticleResponseDTO create(@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
         return articleService.create(articleRequestDTO);
     }
+
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update")
     public ArticleResponseDTO update(@PathVariable("id")String id,@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
         return articleService.update(id,articleRequestDTO);
     }
+
     @GetMapping("/get/{id}")
     public ArticleResponseDTO get(@PathVariable("id") String id) {
         return articleService.getById(id);
     }
+
     @GetMapping("/getAll")
     public List<ArticleResponseDTO> getAll() {
         return articleService.getAll();
     }
+
     @PutMapping("/delete/{id}")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public Boolean delete(@PathVariable String id) {
         return articleService.delete(id);
     }
+
 }

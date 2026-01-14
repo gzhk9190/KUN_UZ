@@ -11,8 +11,8 @@ public class RegistrationValidation {
         if (dto.getSurname() == null || dto.getSurname().trim().isEmpty() || dto.getSurname().trim().length() < 3) {
             throw new AppBadRequestException("Surname Not Valid");
         }
-        if (dto.getEmail() == null || dto.getEmail().trim().isEmpty() || dto.getEmail().trim().length() < 3 || !dto.getEmail().contains("@")) {
-            throw new AppBadRequestException("Email Not Valid");
+        if ((dto.getEmail() == null && dto.getPhone()==null) || (dto.getEmail().trim().isEmpty() && dto.getPhone().trim().isEmpty()) || (dto.getEmail().trim().length() < 3 || !dto.getEmail().contains("@")&& dto.getPhone().trim().length() < 5)) {
+            throw new AppBadRequestException("Email or Phone Not Valid");
         }
         if (dto.getPassword() == null || dto.getPassword().trim().isEmpty() || dto.getPassword().trim().length() < 8) {
             throw new AppBadRequestException("Password Not Valid");

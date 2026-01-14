@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, String> {
@@ -19,6 +20,11 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, String
     Optional<CategoryEntity> findByIdAndVisibleIsTrue(String id);
 
     Optional<CategoryEntity> findAllByVisibleIsTrue();
+
+    List<CategoryEntity> findAllByVisibleIsTrueAndNameEnIsNotNull();
+    List<CategoryEntity> findAllByVisibleIsTrueAndNameRuIsNotNull();
+    List<CategoryEntity> findAllByVisibleIsTrueAndNameUzIsNotNull();
+
     @Modifying
     @Transactional
     @Query(value = "update CategoryEntity set visible = false where id = ?1")
