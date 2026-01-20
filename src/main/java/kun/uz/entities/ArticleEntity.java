@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 public class ArticleEntity extends BaseEntity {
     @Column(nullable = false,length = 50)
     String title;
-    @Column(length = 200)
+    @Column(columnDefinition = "text")
     String description;
     @Column(nullable = false, length = 5000)
     String content;

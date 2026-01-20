@@ -66,7 +66,7 @@ public class RegionService {
 
      }
 
-     private RegionEntity get(String id) {
+     public RegionEntity get(String id) {
         return regionRepository.findByIdAndVisibleIsTrue(id).orElse(null);
      }
 
