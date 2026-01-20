@@ -21,7 +21,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler({ItemAlreadyExistsException.class, ItemNotFoundException.class,
             AppBadRequestException.class, NullPointerException.class, IllegalArgumentException.class,
-            FileUploadException.class, NonUniqueResultException.class, SQLException.class})
+            FileUploadException.class, NonUniqueResultException.class, SQLException.class, PasswordOrEmailWrongException.class, EmailAlreadyExistsException.class, JwtTimedOutException.class})
     public ResponseEntity<?> handleBadRequestException(RuntimeException e) {
         return ResponseEntity.badRequest().body(ApiResponse.badRequest(e.getMessage()));
     }

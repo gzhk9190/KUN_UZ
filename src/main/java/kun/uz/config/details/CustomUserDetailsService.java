@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleIsTrue(username);
+        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleIsTrueOptional(username);
         if (optional.isEmpty()) {
             throw new UsernameNotFoundException("Bunday foydalanuvchi yo'q");
         }

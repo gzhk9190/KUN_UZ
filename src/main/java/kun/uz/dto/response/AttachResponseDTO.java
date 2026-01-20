@@ -27,11 +27,16 @@ public class AttachResponseDTO {
         this.id = id;
         this.url = url;
     }
-    public static AttachResponseDTO toDTO(AttachEntity entity) {
+
+    public AttachResponseDTO(String url) {
+        this.url = url;
+    }
+
+    public static AttachResponseDTO toDTO(String domain,AttachEntity entity) {
         AttachResponseDTO response = new AttachResponseDTO();
         response.setId(entity.getId());
         response.setCreatedDate(entity.getCreateDate());
-        response.setUrl(entity.getPath());
+        response.setUrl(domain + "/attach/download/" + entity.getId());
         response.setExtension(entity.getExtension());
         response.setOriginName(entity.getOriginName());
         return response;

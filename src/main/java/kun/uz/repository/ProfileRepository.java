@@ -21,6 +21,10 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, String>,
 
     Optional<ProfileEntity> findByIdAndVisibleIsTrue(String id);
 
+    @Query("update ProfileEntity p set p.status = :status where p.id = :id")
+    @Modifying
+    @Transactional
+    void updateStatusById(ProfileStatus status, String id);
     Optional<ProfileEntity> findAllByVisibleIsTrue();
     @Modifying
     @Transactional
@@ -28,4 +32,6 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, String>,
     void updateVisible(String id);
 
 
+
+    ProfileEntity findByEmailAndPasswordAndVisibleIsTrue(String email, String pswd);
 }

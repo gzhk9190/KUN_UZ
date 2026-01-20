@@ -72,11 +72,10 @@ public class SavedArticleService {
     private SavedArticleEntity get(String id) {
         return savedArticleRepo.findByIdAndVisibleIsTrue(id).orElse(null);
     }
-
+    
     public ApiResponse<List<SavedArticleResponseDTO>> getAll() {
         return ApiResponse.success(savedArticleRepo.findAllByVisibleIsTrue().stream().map(SavedArticleResponseDTO::toDTO).toList());
     }
-
     public Boolean delete(String id) {
         savedArticleRepo.updateVisible(id);
         return true;
