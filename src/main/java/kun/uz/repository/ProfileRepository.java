@@ -33,5 +33,5 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, String>,
 
 
 
-    ProfileEntity findByEmailAndPasswordAndVisibleIsTrue(String email, String pswd);
+    Optional<ProfileEntity> findByEmailAndPasswordAndVisibleIsTrue(String email, String pswd);
 }

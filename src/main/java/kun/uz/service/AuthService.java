@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -57,13 +58,13 @@ public class AuthService {
         // photoId ham tekshirilsin
 
         RegistrationValidation.isValid(dto);
-        ProfileEntity profileEntity = profileRepository.findByEmailAndVisibleIsTrue(dto.getEmail());
+        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleIsTrue(dto.getEmail());
 
-        if (profileEntity != null) {
-            if (!profileEntity.getStatus().equals(ProfileStatus.NOT_ACTIVE)) {
+        if (optional.isPresent()) {
+            if (!optional.get().getStatus().equals(ProfileStatus.NOT_ACTIVE)) {
                 throw new EmailAlreadyExistsException("Email Already Exists");
             } else {
-                profileRepository.delete(profileEntity);
+                profileRepository.delete(optional.get());
             }
         }
         ProfileEntity entity = new ProfileEntity();
@@ -109,7 +110,7 @@ public class AuthService {
         return ApiResponse.success("User Id :"+userId+" Ga teng bo'lgan Profile muvoffaqiyatli ro'yxatdan o'tdi!!!");
     }
 
-    public ProfileResponseDTO login(RegistrationRequestDTO dto) {
+/*    public ProfileResponseDTO login(RegistrationRequestDTO dto) {
         String pswd = passwordEncoder.encode(dto.getPassword());
         ProfileEntity profileEntity = profileRepository.findByEmailAndPasswordAndVisibleIsTrue(dto.getEmail(),pswd);
         if (profileEntity == null) {
@@ -119,5 +120,17 @@ public class AuthService {
             throw new AppForbiddenException("Email Already Exists");
         }
         return ProfileResponseDTO.toDTO(profileEntity);
+    }*/ // bunaqa xato qilib yozmang exp lardagi informatsiyalarga ahamiyat bering
+
+    public ProfileResponseDTO login(RegistrationRequestDTO dto) {
+        String pswd = passwordEncoder.encode(dto.getPassword());
+        Optional<ProfileEntity> optinal = profileRepository.findByEmailAndPasswordAndVisibleIsTrue(dto.getEmail(),pswd);
+        if (optinal.isEmpty()) {
+            throw new ItemNotFoundException("Profile not found");
+        }
+        if (!optinal.get().getStatus().equals(ProfileStatus.ACTIVE)) {
+            throw new AppForbiddenException("Profile not active");
+        }
+        return ProfileResponseDTO.toDTO(optinal.get());
     }
 }
