@@ -13,6 +13,4 @@ import org.springframework.lang.NonNullApi;
 public class EmailHistoryRequestDTO {
     String email;
     String message;
-
-
 }

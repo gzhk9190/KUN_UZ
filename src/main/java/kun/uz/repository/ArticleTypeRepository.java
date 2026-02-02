@@ -1,6 +1,7 @@
 package kun.uz.repository;
 
 import jakarta.transaction.Transactional;
+import kun.uz.dto.request.ArticleTypeRequestDTO;
 import kun.uz.entities.ArticleTypeEntity;
 import kun.uz.entities.ProfileEntity;
 import kun.uz.service.ArticleTypeService;
@@ -36,5 +37,10 @@ public interface ArticleTypeRepository extends JpaRepository<ArticleTypeEntity, 
     @Query(value = "update ArticleTypeEntity set visible = false where id = ?1")
     void updateVisible(String id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "from ArticleTypeEntity where ")
+    List<String> getArticleIdsByType(ArticleTypeRequestDTO type);
 
+    ArticleTypeEntity getByNameUz(String nameUz);
 }

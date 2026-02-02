@@ -31,6 +31,7 @@ public class ArticleResponseDTO extends ArticleRequestDTO {
         response.setRegionId(entity.getRegion().getId());
         response.setImageId(entity.getImageId());
         response.setSharedCount(entity.getSharedCount());
+        response.setViewCount(entity.getViewCount());
         response.setStatus(entity.getStatus());
         return response;
     }

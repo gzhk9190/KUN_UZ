@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -23,12 +24,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<ProfileEntity> optional = profileRepository.findByEmailAndVisibleIsTrueOptional(username);
-        if (optional.isEmpty()) {
+        ProfileEntity entity = profileRepository.findByEmailAndVisibleIsTrue(username);
+        if (Objects.isNull(entity)) {
             throw new UsernameNotFoundException("Bunday foydalanuvchi yo'q");
         }
-
-        ProfileEntity entity = optional.get();
-        return new CustomUserDetails(entity.getId(), entity.getEmail(), entity.getRole());
+        CustomUserDetails user = new CustomUserDetails();
+        user.setId(entity.getId());
+        user.setLogin(entity.getEmail());
+        user.setRole(entity.getRole());
+        return user;
     }
 }

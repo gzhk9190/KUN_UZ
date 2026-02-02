@@ -1,12 +1,9 @@
 package kun.uz.service;
 
 import jakarta.validation.Valid;
-import kun.uz.config.details.CustomUserDetails;
 import kun.uz.config.details.EntityDetails;
 import kun.uz.dto.request.ArticleLikeRequestDTO;
-import kun.uz.dto.request.ArticleLikeRequestDTO;
 import kun.uz.dto.response.ApiResponse;
-import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.dto.response.ArticleLikeResponseDTO;
 import kun.uz.entities.ArticleLikeEntity;
 import kun.uz.enums.ArticleLikeStatus;
@@ -51,11 +48,7 @@ public class ArticleLikeService {
 
     public ApiResponse<ArticleLikeResponseDTO> getById(String id) {
         Optional<ArticleLikeEntity> optional = repository.findByIdAndVisibleIsTrue(id);
-        if (optional.isEmpty()) {
-            return ApiResponse.badRequest("Bunday ArticleLike mavjud emas");
-        } else {
-            return ApiResponse.success(ArticleLikeResponseDTO.toDTO(optional.get()));
-        }
+        return optional.map(articleLikeEntity -> ApiResponse.success(ArticleLikeResponseDTO.toDTO(articleLikeEntity))).orElseGet(() -> ApiResponse.badRequest("Bunday ArticleLike mavjud emas"));
 
     }
 

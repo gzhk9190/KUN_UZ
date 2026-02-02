@@ -42,5 +42,4 @@ public class EmailHistoryController {
     public ResponseEntity<Page<EmailHistoryResponseDTO>> getPaginationList(Pageable pageable) {
         return ResponseEntity.ok(emailHistoryService.getPagination(pageable));
     }
-
 }

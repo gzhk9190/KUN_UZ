@@ -13,6 +13,7 @@ import kun.uz.repository.EmailSMSRepository;
 import kun.uz.repository.ProfileRepository;
 import kun.uz.util.JwtUtil;
 import kun.uz.validation.RegistrationValidation;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -59,7 +61,7 @@ public class AuthService {
         RegistrationValidation.isValid(dto);
         ProfileEntity profileEntity = profileRepository.findByEmailAndVisibleIsTrue(dto.getEmail());
 
-        if (profileEntity != null) {
+        if (Objects.nonNull(profileEntity)) {
             if (!profileEntity.getStatus().equals(ProfileStatus.NOT_ACTIVE)) {
                 throw new EmailAlreadyExistsException("Email Already Exists");
             } else {
@@ -87,31 +89,32 @@ public class AuthService {
 
         return ApiResponse.success("Zo'rkuuu");
     }
-    public ApiResponse<String> verification(String jwt){
+
+    public ApiResponse<String> verification(String jwt) {
         String userId = null;
         try {
             userId = JwtUtil.decode(jwt).getId();
         } catch (JwtException e) {
             throw new AppBadRequestException("Verification not completed");
         }
-        EmailSMSEntity currentEmailSMS = emailSMSRepository.getByEmailAndVisibleIsTrue(profileRepository.findByIdAndVisibleIsTrue(userId).get().getEmail(),true);
+        EmailSMSEntity currentEmailSMS = emailSMSRepository.getByEmailAndVisibleIsTrue(profileRepository.findByIdAndVisibleIsTrue(userId).get().getEmail(), true);
         if (currentEmailSMS != null) {
             if (currentEmailSMS.getUsed()) {
                 throw new EmailAlreadyExistsException("Email is already in use");
             }
-            if (LocalDateTime.now().isAfter(currentEmailSMS.getCreateDate().plusMinutes(3))){
+            if (LocalDateTime.now().isAfter(currentEmailSMS.getCreateDate().plusMinutes(3))) {
                 throw new JwtTimedOutException("Bu parol ning yaroqlilik muddati tugagan! ");
             }
             currentEmailSMS.setUsed(true);
             emailSMSRepository.save(currentEmailSMS);
         }
         profileRepository.updateStatusById(ProfileStatus.ACTIVE, userId);
-        return ApiResponse.success("User Id :"+userId+" Ga teng bo'lgan Profile muvoffaqiyatli ro'yxatdan o'tdi!!!");
+        return ApiResponse.success("User Id :" + userId + " Ga teng bo'lgan Profile muvoffaqiyatli ro'yxatdan o'tdi!!!");
     }
 
     public ProfileResponseDTO login(RegistrationRequestDTO dto) {
         String pswd = passwordEncoder.encode(dto.getPassword());
-        ProfileEntity profileEntity = profileRepository.findByEmailAndPasswordAndVisibleIsTrue(dto.getEmail(),pswd);
+        ProfileEntity profileEntity = profileRepository.findByEmailAndPasswordAndVisibleIsTrue(dto.getEmail(), pswd);
         if (profileEntity == null) {
             throw new ItemNotFoundException("Email Already Exists");
         }
@@ -119,5 +122,23 @@ public class AuthService {
             throw new AppForbiddenException("Email Already Exists");
         }
         return ProfileResponseDTO.toDTO(profileEntity);
+    }
+
+    public ApiResponse<String> resend(RegistrationRequestDTO dto) {
+        EmailSMSEntity lastEmail = emailSMSRepository.getByEmailAndVisibleIsTrue(dto.getEmail(), true);
+        if (lastEmail.getUsed()) {
+            throw new ItemAlreadyExistsException("Bu parol allaqachon ishlatilingan");
+        }
+        if (lastEmail.getCreateDate().isBefore(LocalDateTime.now().plusMinutes(3))) {
+            throw new JwtTimedOutException("Allaqachon 1 necha marotaba email qabul qildingiz. Birozdan so'ng murojaat qiling ");
+        }
+        Integer code = random.nextInt(10000, 99999);
+        EmailSMSEntity smsEntity = new EmailSMSEntity();
+        smsEntity.setEmail(dto.getEmail());
+        smsEntity.setCode(code);
+        smsEntity.setUsed(false);
+        emailSMSRepository.save(smsEntity);
+        send(dto.getEmail(), code);
+        return ApiResponse.success("Email :" + dto.getEmail() + " Ga teng bo'lgan Profile muvoffaqiyatli ro'yxatdan o'tdi!!!");
     }
 }

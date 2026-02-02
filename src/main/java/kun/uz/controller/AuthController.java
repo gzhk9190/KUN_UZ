@@ -39,8 +39,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    private ResponseEntity<?> login(@RequestBody AuthRequestDTO dto){
+    private ResponseEntity<?> login(@RequestBody RegistrationRequestDTO dto){
         return ResponseEntity.ok(authService.login(dto));
+    }
+    @PreAuthorize(value = "hasRole('ROLE_USER')")
+    @PostMapping("/Resend")
+    public ApiResponse<String> resend(@RequestBody RegistrationRequestDTO dto) {
+        return authService.resend(dto);
     }
 
     // qayta email code jonatishda barcha qolgan code larni used true qilib qo'yasizlar  yoki visible false qilasizlar

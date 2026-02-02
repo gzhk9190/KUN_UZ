@@ -16,6 +16,8 @@ public class ArticleRequestDTO {
     String title;
     String description;
     String content;
+    Integer viewCount;
+    Integer sharedCount;
     String imageId;
     String regionId;
     String categoryId;

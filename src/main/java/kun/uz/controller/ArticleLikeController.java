@@ -17,19 +17,22 @@ import java.util.List;
 public class ArticleLikeController {
     private final ArticleLikeService articleLikeService;
 
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ApiResponse<ArticleLikeResponseDTO> create(@Valid @RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
         return articleLikeService.create(articleLikeRequestDTO);
     }
-
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     public ApiResponse<ArticleLikeResponseDTO> update(@PathVariable("id")String id,@Valid @RequestBody ArticleLikeRequestDTO articleLikeRequestDTO) {
         return articleLikeService.update(id,articleLikeRequestDTO);
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @GetMapping("/get/{id}")
     public ApiResponse<ArticleLikeResponseDTO> get(@PathVariable("id") String id) {
         return articleLikeService.getById(id);
     }
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @GetMapping("/getAll")
     public ApiResponse<List<ArticleLikeResponseDTO>> getAll() {
         return articleLikeService.getAll();
@@ -37,7 +40,6 @@ public class ArticleLikeController {
 
     @PutMapping("/delete/{id}")
     public ApiResponse<Boolean> delete(@PathVariable String id) {
-
         return articleLikeService.delete(id);}
 
     @PutMapping("/like/{articleId}")

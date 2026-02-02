@@ -2,6 +2,7 @@ package kun.uz.controller;
 
 import jakarta.validation.Valid;
 import kun.uz.dto.request.ProfileRequestDTO;
+import kun.uz.dto.request.filter.ProfileFilterRequestDTO;
 import kun.uz.dto.response.ApiResponse;
 import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.service.ProfileService;
@@ -38,7 +39,7 @@ public class ProfileController {
     }
 
     @PutMapping("/update/photo/")
-    public ApiResponse<ProfileResponseDTO> updatePhoto(@Valid @RequestBody String photoId) {
+    public ApiResponse<ProfileResponseDTO> updatePhoto( @RequestBody String photoId) {
         return profileService.updatePhoto(photoId);
     }
 
@@ -49,7 +50,7 @@ public class ProfileController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/pagination")
-    public ResponseEntity<Page<ProfileResponseDTO>> getPaginationList(
+    public ResponseEntity<Page< ProfileResponseDTO>> getPaginationList(
             Pageable pageable) {
         return ResponseEntity.ok(profileService.getPagination(pageable));
     }
@@ -63,6 +64,11 @@ public class ProfileController {
     @PutMapping("/delete/{id}")
     public Boolean delete(@PathVariable String id) {
         return profileService.delete(id);
+    }
+
+    @PostMapping("/filter/{page}/{size}")
+    public ApiResponse<Page<ProfileResponseDTO>> filter(@RequestBody ProfileFilterRequestDTO dto, @PathVariable String page, @PathVariable String size) {
+        return  profileService.filter(dto, Integer.parseInt(page), Integer.parseInt(size));
     }
 }
 

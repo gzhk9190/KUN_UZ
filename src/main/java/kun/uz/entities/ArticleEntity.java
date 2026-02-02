@@ -24,6 +24,10 @@ public class ArticleEntity extends BaseEntity {
     String content;
     @Column(name = "shared_count")
     Integer sharedCount;
+
+    @Column(name = "shared_count")
+    Integer viewCount;
+
     @Column(name = "image_id")
     String imageId;
 

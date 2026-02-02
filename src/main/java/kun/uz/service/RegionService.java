@@ -3,15 +3,11 @@ package kun.uz.service;
 import jakarta.validation.Valid;
 import kun.uz.dto.request.RegionRequestDTO;
 import kun.uz.dto.response.ApiResponse;
-import kun.uz.dto.response.ArticleTypeResponseDTO;
-import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.dto.response.RegionResponseDTO;
-import kun.uz.entities.ProfileEntity;
 import kun.uz.entities.RegionEntity;
 import kun.uz.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -64,11 +60,7 @@ public class RegionService {
 
     public ApiResponse<RegionResponseDTO> getById(String id) {
         Optional<RegionEntity> optional = regionRepository.findByIdAndVisibleIsTrue(id);
-        if(optional.isEmpty()) {
-            return ApiResponse.badRequest("Bunday viloyat yoki shahar mavjud emas");
-        } else {
-            return ApiResponse.success(RegionResponseDTO.toDTO(optional.get()));
-        }
+        return optional.map(regionEntity -> ApiResponse.success(RegionResponseDTO.toDTO(regionEntity))).orElseGet(() -> ApiResponse.badRequest("Bunday viloyat yoki shahar mavjud emas"));
 
      }
 
@@ -85,7 +77,7 @@ public class RegionService {
         return true;
     }
 
-    public @Nullable Page<RegionResponseDTO> getPagination(Pageable pageable) {
+    public  Page<RegionResponseDTO> getPagination(Pageable pageable) {
         return regionRepository.findByVisible(true, pageable).map(this::toDTO);
     }
     public RegionResponseDTO toDTO(RegionEntity entity) {

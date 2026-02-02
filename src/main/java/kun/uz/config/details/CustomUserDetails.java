@@ -2,11 +2,13 @@ package kun.uz.config.details;
 
 import kun.uz.enums.ProfileRole;
 import lombok.Getter;
+import lombok.Setter;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -18,18 +20,14 @@ import java.util.List;
  */
 
 @Component
+@Setter
+@Getter
 public class CustomUserDetails implements UserDetails {
-    @Getter
     String id;
     String login;
-    @Getter
     ProfileRole role;
 
-    public CustomUserDetails(String id, String login, ProfileRole role) {
-        this.id = id;
-        this.login = login;
-        this.role = role;
-    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

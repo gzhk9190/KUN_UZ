@@ -2,6 +2,7 @@ package kun.uz.service;
 
 import jakarta.persistence.criteria.Predicate;
 import jakarta.validation.Valid;
+import kun.uz.config.details.CustomUserDetails;
 import kun.uz.dto.request.ProfileRequestDTO;
 import kun.uz.dto.request.filter.ProfileFilterRequestDTO;
 import kun.uz.dto.response.ApiResponse;
@@ -9,6 +10,7 @@ import kun.uz.dto.response.ProfileResponseDTO;
 import kun.uz.entities.ProfileEntity;
 import kun.uz.enums.ProfileStatus;
 import kun.uz.repository.ProfileRepository;
+import kun.uz.validation.ProfileValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,8 @@ import java.util.Optional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+
+    private final AttachService attachService;
 
     public ApiResponse<ProfileResponseDTO> create(@Valid ProfileRequestDTO dto) {
         if (Objects.isNull(dto.getName())){
@@ -96,11 +100,7 @@ public class ProfileService {
 
     public ApiResponse<ProfileResponseDTO> getById(String id) {
         Optional<ProfileEntity> optional = profileRepository.findByIdAndVisibleIsTrue(id);
-        if (optional.isEmpty()) {
-            return ApiResponse.badRequest("Bunday profile mavjud emas");
-        } else {
-            return ApiResponse.success(ProfileResponseDTO.toDTO(optional.get()));
-        }
+        return optional.map(profileEntity -> ApiResponse.success(ProfileResponseDTO.toDTO(profileEntity))).orElseGet(() -> ApiResponse.badRequest("Bunday profile mavjud emas"));
 
     }
 
@@ -133,12 +133,40 @@ public class ProfileService {
                 predicates.add(cb.or(name, surname));
             }
             // o'zila qilasizlar
-
+            //??_NImani_??(vd da etmapsiz 😭)
             return cb.and(predicates.toArray(new Predicate[0]));
         });
 
         Page<ProfileEntity> list = profileRepository.findAll(specification, pageable);
 
         return ApiResponse.success(list.map(ProfileResponseDTO::toDTO));
+    }
+
+    public  Page<ProfileResponseDTO> getPagination(Pageable pageable) {
+        return profileRepository.findByVisible(true, pageable).map(this::toDTO);
+    }
+    public ProfileResponseDTO toDTO(ProfileEntity entity) {
+       return ProfileResponseDTO.toDTO(entity);
+    }
+
+    public ApiResponse<ProfileResponseDTO> updatePhoto(@Valid String photoId) {
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        ProfileEntity profile = get(customUserDetails.getId());
+
+
+        if (attachService.get(profile.getPhotoId()) != null){
+            attachService.delete(profile.getPhotoId());
+        }
+        profileRepository.updateAttachId(photoId, profile.getId());
+
+        return ApiResponse.success(ProfileResponseDTO.toDTO(profile));
+    }
+
+    public ApiResponse<ProfileResponseDTO> updateDetail(@Valid ProfileRequestDTO profileRequestDTO) {
+        ProfileValidation.isValid(profileRequestDTO);
+
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        ProfileEntity profile = get(customUserDetails.getId());
+        return ApiResponse.success(ProfileResponseDTO.toDTO(profileRepository.save(profile)));
     }
 }
